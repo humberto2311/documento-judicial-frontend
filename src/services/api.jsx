@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL ?? 'http://localhost:8080/api/document-process';
+// Railway inyecta variables de entorno en el build/runtime.
+// En Vite, para exponer envs al cliente usamos `import.meta.env`.
+const API_URL =
+  (import.meta.env.API_URL || import.meta.env.VITE_API_URL || '').trim() ||
+  'http://localhost:8080/api/document-process';
 
 const api = axios.create({
   baseURL: API_URL,

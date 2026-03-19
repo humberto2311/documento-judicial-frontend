@@ -36,7 +36,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { documentProcessSchema, audienceTypes, nacionOptions } from '../utils/validation';
+import { documentProcessSchema, nacionOptions } from '../utils/validation';
 import DocumentCard from './DocumentCard';
 import {
   useDocuments,
@@ -64,7 +64,6 @@ const DocumentProcessForm = () => {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(documentProcessSchema),
