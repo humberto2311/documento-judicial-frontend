@@ -90,6 +90,9 @@ const DocumentProcessForm = () => {
     } else {
       await createMutation.mutateAsync(data);
     }
+
+    // Forzamos recargar el listado para reflejar el cambio sin necesitar refresh manual.
+    await refetch();
     
     reset();
     setSelectedId(null);
@@ -130,7 +133,9 @@ const DocumentProcessForm = () => {
   };
 
   // Filtrado
-  const filteredDocuments = documents.filter(doc => 
+  const documentsSafe = Array.isArray(documents) ? documents : [];
+
+  const filteredDocuments = documentsSafe.filter(doc => 
     doc.names?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     doc.lastNames?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     doc.identity?.includes(searchTerm)

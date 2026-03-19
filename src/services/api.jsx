@@ -2,12 +2,32 @@ import axios from 'axios';
 
 // Railway inyecta variables de entorno en el build/runtime.
 // En Vite, para exponer envs al cliente usamos `import.meta.env`.
-const API_URL =
-  (import.meta.env.API_URL || import.meta.env.VITE_API_URL || '').trim() ||
-  'http://localhost:8080/api/document-process';
+const rawEnvApiUrl = (import.meta.env.API_URL || import.meta.env.VITE_API_URL || '').trim();
+
+// Normaliza el valor para que admita:
+// 1) Solo dominio: `backend-production-...up.railway.app`
+// 2) Dominio + path incompleto: `backend.../api`
+// 3) Base completa esperada: `https://backend.../api/document-process`
+let API_URL = rawEnvApiUrl;
+if (API_URL) {
+  // Asegura scheme para que axios pueda resolver URLs absolutas.
+  if (!API_URL.startsWith('http://') && !API_URL.startsWith('https://')) {
+    API_URL = `https://${API_URL}`;
+  }
+
+  API_URL = API_URL.replace(/\/+$/, ''); // quita trailing slash
+
+  // Si no trae el path del recurso, lo agregamos.
+  if (!API_URL.includes('/api/document-process')) {
+    API_URL = `${API_URL}/api/document-process`;
+  }
+} else {
+  API_URL = 'http://localhost:8080/api/document-process';
+}
 
 console.log('[api] import.meta.env.API_URL:', import.meta.env.API_URL);
 console.log('[api] import.meta.env.VITE_API_URL:', import.meta.env.VITE_API_URL);
+console.log('[api] rawEnvApiUrl:', rawEnvApiUrl);
 console.log('[api] resolved API_URL:', API_URL);
 
 const api = axios.create({
