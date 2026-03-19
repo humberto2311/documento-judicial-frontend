@@ -6,6 +6,10 @@ const API_URL =
   (import.meta.env.API_URL || import.meta.env.VITE_API_URL || '').trim() ||
   'http://localhost:8080/api/document-process';
 
+console.log('[api] import.meta.env.API_URL:', import.meta.env.API_URL);
+console.log('[api] import.meta.env.VITE_API_URL:', import.meta.env.VITE_API_URL);
+console.log('[api] resolved API_URL:', API_URL);
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
